@@ -1,0 +1,8 @@
+version: '2'
+services:
+  makespace_castellar_server:
+    volumes:
+      - '~/Projects/makespace_castellar_ecosystem/makespace_castellar:/var/www:cached'
+  makespace_castellar_database:
+    volumes:
+      - '~/Projects/makespace_castellar_ecosystem/makespace_castellar_mysql:/var/lib/mysql:cached'

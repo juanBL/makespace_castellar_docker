@@ -1,0 +1,41 @@
+version: '2'
+services:
+  makespace_castellar_server:
+    build: docker/services/makespace_castellar_server
+    extends:
+      file: docker/volume_mappings.yml
+      service: makespace_castellar_server
+    networks:
+      main:
+        aliases:
+          - makespace_castellar_apache2
+          - local.www.makespacecastellar.landing.com
+    depends_on:
+      - makespace_castellar_database
+    ports:
+      - '84:84' # Frontend
+
+  makespace_castellar_database:
+      build: docker/services/makespace_castellar_database
+      extends:
+        file: docker/volume_mappings.yml
+        service: makespace_castellar_database
+      networks:
+        main:
+          aliases:
+            - makespace_castellar_mysql
+      ports:
+        - '3308:3306'
+      environment:
+        MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+        MYSQL_ROOT_PASSWORD: ""
+        MYSQL_DATABASE: makespace_castellar_local
+        MYSQL_USER: makespace_castellar_local
+        MYSQL_PASSWORD: 1234
+networks:
+  main:
+    ipam:
+      config:
+        - subnet: 173.18.0.0/16
+          ip_range: 173.18.0.0/16
+          gateway: 173.18.0.1
